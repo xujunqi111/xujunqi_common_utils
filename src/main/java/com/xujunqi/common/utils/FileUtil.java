@@ -10,21 +10,42 @@ import java.util.List;
 
 
 public class FileUtil {
+	
+	public static String getExtName(String str) {
+		if(StringUtil.isNull(str)) {
+			return null;
+		}
+		if(!str.contains(".")) {
+			throw new RuntimeException("无法获取文件扩展名");
+		}
+		return str.substring(str.indexOf("."));
+	}
 	/**
-	 * 根据文件，截取扩展名
-	 * @param fileName "aa.png"
-	 * @return
+	 * @Title: delete   
+	 * @Description: 递归删除文件   
 	 */
-	public static String getExtName(String fileName) {
-		//处理空异常
-		if(fileName==null || "".equals(fileName)) {
-			throw new RuntimeException("文件名不能为空");
+	public static void delete(File file) {
+		/** 获取文件列表 **/
+		File[] listFiles = file.listFiles();
+		for(File theFile : listFiles) {
+			/** 如果是文件夹，递归删除 **/
+			if(theFile.isDirectory()) {
+				delete(theFile);
+				/** 删除空文件夹 **/
+				theFile.delete();
+			}else {
+				/** 如果是文件，直接删除 **/
+				theFile.delete();
+			}
+			
 		}
-		if(fileName.indexOf(".")<=-1) {
-			throw new RuntimeException(fileName+":该文件名没有包含扩展名");
-		}
-		String extName = fileName.substring(fileName.lastIndexOf("."));
-		return extName;
+	}
+	/**
+	 * @Title: delete   
+	 * @Description: 递归删除文件   
+	 */
+	public static void delete(String pathname) {
+		delete(new File(pathname));
 	}
 	/**
 	 * 获取系统当前用户目录
@@ -36,95 +57,9 @@ public class FileUtil {
 	/**
 	 * @Title: getSystemTempDirectory   
 	 * @Description: 操作系统临时目录
-	 * @param: @return      
-	 * @return: String      
-	 * @throws
 	 */
 	public static String getSystemTempDirectory() {
 		return System.getProperty("java.io.tmpdir");
-	}
-	/**
-	 * @Title: readTextFileByLine   
-	 * @Description: 读取文件内容   
-	 * @param: @param pathname
-	 * @param: @return      
-	 * @return: String      
-	 * @throws
-	 */
-	public static String readTextFileByLine(String pathname) {
-		BufferedReader br = null;
-		StringBuffer sb = new StringBuffer();
-		try {
-			br = new BufferedReader(new FileReader(new File(pathname)));
-			do {
-				sb.append(br.readLine());
-				sb.append("\r\n");
-			}while(br.read()!=-1);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}finally {
-			StreamUtil.closeAll(br);
-		}
-		return sb.toString();
-	}
-	/**
-	 * @Title: readTextFileOfList   
-	 * @Description: 按行读取文件内容到list集合   
-	 * @param: @param pathname
-	 * @param: @return      
-	 * @return: List<String>      
-	 * @throws
-	 */
-	public static List<String> readTextFileOfList(String pathname) {
-		BufferedReader br = null;
-		List<String> strList = new ArrayList<>();
-		try {
-			br = new BufferedReader(new FileReader(new File(pathname)));
-			do {
-				strList.add(br.readLine());
-			}while(br.read()!=-1);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}finally {
-			StreamUtil.closeAll(br);
-		}
-		return strList;
-	}
-	/**
-	 * @Title: deleteFile   
-	 * @Description: 递归删除文件   
-	 * @param: @param file      
-	 * @return: void      
-	 * @throws
-	 */
-	public static void deleteFile(File file) {
-		if(file.isDirectory()) {
-			File[] listFiles = file.listFiles();
-			for(File theFile:listFiles) {
-				deleteFile(theFile);
-			}
-			file.delete();
-		}else {
-			file.delete();
-		}
-	}
-	/**
-	 * @Title: deleteFile   
-	 * @Description: 递归删除文件  
-	 * @param: @param filePath      
-	 * @return: void      
-	 * @throws
-	 */
-	public static void deleteFile(String filePath) {
-		deleteFile(new File(filePath));
 	}
 	/**
 	 * @Title: getFileSize   
@@ -139,16 +74,68 @@ public class FileUtil {
 	public static String getFileSize(File file) {
 		long length = file.length();
 		double len = length/1024.0;
-//		return Math.round((length/1024.0))+"kb";
 		return String.format("%.2f",len)+"kb";
 	}
-	
-	public static String getFileSize(String fileFullName) {
-		return getFileSize(new File(fileFullName));
+	/**
+	 * @Title: readTextFile   
+	 * @Description: TODO(这里用一句话描述这个方法的作用)   
+	 * @param: @param file
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
+	public static String readTextFile(File file) {
+		StringBuffer sb = new StringBuffer();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			do {
+				String readLine = br.readLine();
+				sb.append(readLine);
+				sb.append("\r\n");
+			}while(br.read()!=-1);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			StreamUtil.closeAll(br);
+		}
+		return sb.toString();
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(getSystemTempDirectory());
+	/**
+	 * @Title: readTextFileToList   
+	 * @Description: 读取文本文件到list   
+	 * @param: @param file
+	 * @param: @return      
+	 * @return: List<String>      
+	 * @throws
+	 */
+	public static List<String> readTextFileToList(File file) {
+		List<String> list = new ArrayList<String>();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			do {
+				String readLine = br.readLine();
+				list.add(readLine);
+			}while(br.read()!=-1);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			StreamUtil.closeAll(br);
+		}
+		return list;
 	}
-	
+	/**
+	 * @Title: readTextFileToList   
+	 * @Description: 读取文本文件到list   
+	 * @param: @param pathname
+	 * @param: @return      
+	 * @return: List<String>      
+	 * @throws
+	 */
+	public static List<String> readTextFileToList(String pathname){
+		return readTextFileToList(new File(pathname));
+	}
 }
