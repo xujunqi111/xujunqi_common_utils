@@ -10,7 +10,14 @@ import java.util.List;
 
 
 public class FileUtil {
-	
+	/**
+	 * @Title: getExtName   
+	 * @Description: 文件扩展名
+	 * @param: @param str
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
+	 */
 	public static String getExtName(String str) {
 		if(StringUtil.isNull(str)) {
 			return null;
@@ -23,6 +30,9 @@ public class FileUtil {
 	/**
 	 * @Title: delete   
 	 * @Description: 递归删除文件   
+	 * @param: @param file      
+	 * @return: void      
+	 * @throws
 	 */
 	public static void delete(File file) {
 		/** 获取文件列表 **/
@@ -43,6 +53,9 @@ public class FileUtil {
 	/**
 	 * @Title: delete   
 	 * @Description: 递归删除文件   
+	 * @param: @param pathname      
+	 * @return: void      
+	 * @throws
 	 */
 	public static void delete(String pathname) {
 		delete(new File(pathname));
@@ -57,6 +70,9 @@ public class FileUtil {
 	/**
 	 * @Title: getSystemTempDirectory   
 	 * @Description: 操作系统临时目录
+	 * @param: @return      
+	 * @return: String      
+	 * @throws
 	 */
 	public static String getSystemTempDirectory() {
 		return System.getProperty("java.io.tmpdir");
@@ -98,7 +114,7 @@ public class FileUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
-			StreamUtil.closeAll(br);
+			StreamUtil.close(br);
 		}
 		return sb.toString();
 	}
@@ -123,7 +139,7 @@ public class FileUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
-			StreamUtil.closeAll(br);
+			StreamUtil.close(br);
 		}
 		return list;
 	}
