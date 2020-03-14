@@ -4,7 +4,7 @@ import java.security.MessageDigest;
   
 
 public class Md5Util {
-	 /**
+	/**
      * @Title: string2MD5   
      * @Description: MD5加码 生成32位md5码  
      * @param: @param inStr
@@ -53,11 +53,6 @@ public class Md5Util {
         }  
         String s = new String(a);
         return s;
-    }  
-    
-    public static void main(String[] args) {
-		String string2md5 = Md5Util.string2MD5("123456");
-		System.out.println(string2md5);
-	}
+    }
 }
 

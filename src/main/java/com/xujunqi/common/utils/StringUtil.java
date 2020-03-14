@@ -5,38 +5,40 @@ import java.util.Random;
 
 public class StringUtil {
 	/**
-	 * @Title: isNull   
-	 * @Description: 判断字符串是否为空   
+	 * @Title: isBlank   
+	 * @Description: 判断字符串是否为空  
 	 * @param: @param str
 	 * @param: @return      
 	 * @return: boolean      
 	 * @throws
 	 */
-	public static boolean isNull(String str) {
+	public static boolean isBlank(String str) {
 		if(str==null) {
 			return true;
 		}
-		/** 去空格后，如果为"",返回true **/
+		//去空格
 		str = str.trim();
-		if("".equals(str)) {
+		//
+		if(str.length()==0) {
 			return true;
 		}
 		return false;
 	}
 	/**
-	 * @Title: isNotNull   
-	 * @Description: 判断字符串不为空   
+	 * @Title: isNotBlank   
+	 * @Description: 字符串内容不为空，返回true   
 	 * @param: @param str
 	 * @param: @return      
 	 * @return: boolean      
 	 * @throws
 	 */
-	public static boolean isNotNull(String str) {
-		return !isNull(str);
+	public static boolean isNotBlank(String str) {
+		return !isBlank(str);
 	}
+	
 	/**
 	 * @Title: isPhoneNum   
-	 * @Description: 是否为手机号   18618109887
+	 * @Description: 判断字符串是否为手机号   
 	 * @param: @param str
 	 * @param: @return      
 	 * @return: boolean      
@@ -48,116 +50,106 @@ public class StringUtil {
 	}
 	/**
 	 * @Title: isEmail   
-	 * @Description: 判断是否为邮箱 zhanggm1002@qq.com   
-	 * @param: @param str
+	 * @Description: 验证是否为邮箱   
+	 * @param: @param str zhanggm1002@qq.com
 	 * @param: @return      
 	 * @return: boolean      
 	 * @throws
 	 */
 	public static boolean isEmail(String str) {
-		String regex = "\\w+@\\w+.(com|cn|com.cn|net)";
+		String regex = "[A-Za-z0-9]+@[A-Za-z0-9]+.(com|cn|com.cn|net)";
 		return str.matches(regex);
 	}
 	/**
 	 * @Title: isLetter   
-	 * @Description: 判断是否全为字母   
-	 * @param: @param str
+	 * @Description: TODO(描述这个方法的作用)   
 	 * @param: @return      
 	 * @return: boolean      
 	 * @throws
 	 */
 	public static boolean isLetter(String str) {
-		if(isNull(str)) {
-			return false;
+		if(isNotBlank(str)) {
+			str = str.toLowerCase();
+			String regex = "[a-z]+";
+			return str.matches(regex);
 		}
-		str = str.toLowerCase();
-		String regex = "[a-z]+";
-		return str.matches(regex);
+		return false;
 	}
 	/**
-	 * @Title: isNumber   
-	 * @Description:    
-	 * @param: @param str
-	 * @param: @return      
-	 * @return: boolean      
-	 * @throws
-	 */
-	public static boolean isNumber(String str) {
-		if(isNull(str)) {
-			return false;
-		}
-		str = str.toLowerCase();
-		String regex = "[0-9]+";
-		return str.matches(regex);
-	}
-	/**
-	 * @Title: getRandomChar   
-	 * @Description: 获得随机一个字符   
+	 * @Title: getRandomAzChar   
+	 * @Description: 获取随机字符（a-z）   
 	 * @param: @return      
 	 * @return: char      
 	 * @throws
 	 */
-	public static char getRandomChar() {
+	public static char getRandomAzChar() {
+		//随机类
 		Random random = new Random();
-		char c = (char)('a'+random.nextInt(26));
-		return c;
+		//开始字符在acsii码
+		int startChar = 'a'+0;
+		//生成随机字符
+		char newChar = (char)(startChar+random.nextInt(26));
+		return newChar;
 	}
 	/**
-	 * @Title: getRandomChar   
-	 * @Description: 获得指定位数的随机字符   
+	 * @Title: getRandomLetter   
+	 * @Description: 获取随机字符串 
 	 * @param: @param num
 	 * @param: @return      
 	 * @return: String      
 	 * @throws
 	 */
-	public static String getRandomChar(int num) {
+	public static String getRandomLetter(int num) {
+		//保存生成胡字符
 		StringBuffer sb = new StringBuffer();
+		//生成随机字符
 		for(int i=0;i<num;i++) {
-			char c = getRandomChar();
-			sb.append(c);
+			char newChar = getRandomAzChar();
+			sb.append(newChar);
 		}
 		return sb.toString();
 	}
 	
 	/**
-	 * @Title: getRandomNumber   
-	 * @Description: 获得随机数字   
+	 * @Title: getRandomNumberChar   
+	 * @Description: 获取随机数字字符 
 	 * @param: @return      
 	 * @return: char      
 	 * @throws
 	 */
-	public static char getRandomNumber() {
+	public static char getRandomNumberChar() {
+		//随机类
 		Random random = new Random();
-		char c = (char)('0'+random.nextInt(10));
-		return c;
+		//开始字符在acsii码
+		int startChar = '0'+0;
+		//生成随机字符
+		char newChar = (char)(startChar+random.nextInt(10));
+		return newChar;
 	}
-	
 	/**
-	 * @Title: getRandomCharAndNumber   
-	 * @Description: 获得随机字符串（数字+字符）   
+	 * @Title: getRandomLetterAndNumberStr   
+	 * @Description: 获得随机字符串（a-z0-9）   
 	 * @param: @param num
 	 * @param: @return      
-	 * @return: char      
+	 * @return: String      
 	 * @throws
 	 */
-	public static String getRandomCharAndNumber(int num) {
+	public static String getRandomLetterAndNumberStr(int num) {
 		StringBuffer sb = new StringBuffer();
 		Random random = new Random();
-		for(int i=0;i<num;i++) {
-			int randomNum = random.nextInt(36);
-			if(randomNum>10) {
-				char c = getRandomChar();
-				sb.append(c);
+		for (int i = 0; i < num; i++) {
+			if(random.nextInt(36)>10) {
+				sb.append(getRandomAzChar());
 			}else {
-				char c = getRandomNumber();
-				sb.append(c);
+				sb.append(getRandomNumberChar());
 			}
 		}
 		return sb.toString();
 	}
+	
 	/**
 	 * @Title: randomChineseString   
-	 * @Description: 随机中文   
+	 * @Description: 返回一个中文文字//GB2312中文简体  
 	 * @param: @return      
 	 * @return: String      
 	 * @throws
@@ -181,23 +173,23 @@ public class StringUtil {
 	}
 	/**
 	 * @Title: randomChineseString   
-	 * @Description: 获得随机中文   
-	 * @param: @param num
+	 * @Description: 返回参数length个中文汉字字符串，字符集必须在GB2312(相当于中文简体)范围内   
+	 * @param: @param length
 	 * @param: @return      
 	 * @return: String      
 	 * @throws
 	 */
-	public static String randomChineseString(int num) {
-		StringBuffer sb = new StringBuffer();
-		for(int i=0;i<num;i++) {
-			String randomChineseString = randomChineseString();
-			sb.append(randomChineseString);
+	public static String randomChineseString(int length) {
+		String str = "";
+		for (int i = 0; i < length; i++) {
+			str += randomChineseString();
 		}
-		return sb.toString();
+
+		return str;
 	}
 	/**
 	 * @Title: randomChineseName   
-	 * @Description: 百家姓 获得随机姓  
+	 * @Description: 返回中文姓名，必须以真实姓开头
 	 * @param: @return      
 	 * @return: String      
 	 * @throws
@@ -236,14 +228,35 @@ public class StringUtil {
 		// 随机获取姓氏
 		String name1 = surname[RandomUtil.random(0, surname.length - 1)];
 		// 随机获取1-2个中文
-		String name2 = randomChineseString(RandomUtil.random(1, 3));
+		String name2 = randomChineseString(RandomUtil.random(1, 2));
 		return name1 + name2;
 	}
 	
-	
-	public static void main(String[] args) {
-		for(int i=0;i<100;i++)
-		System.out.println(randomChineseName());
+	/**
+	 * 验证是否是URL
+	 * @param url
+	 * @return
+	 */
+	public static boolean isHttpUrl(String str){
+		 //转换为小写
+        str = str.toLowerCase();
+        String regex = "^((https|http|ftp|rtsp|mms)?://)"  //https、http、ftp、rtsp、mms
+                + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@  
+               + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 例如：199.194.52.184               
+                 + "|" // 允许IP和DOMAIN（域名） 或单域名
+                 + "[0-9a-z]*"  // 或单域名
+                 + "|" // 允许IP和DOMAIN（域名） 或单域名
+                 + "([0-9a-z_!~*'()-]+\\.)*" // 域名- www.  
+                 + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名  
+                + "[a-z]{2,6})" // first level domain- .com or .museum  
+                + "(:[0-9]{1,5})?" // 端口号最大为65535,5位数
+                + "((/?)|" // a slash isn't required if there is no file name  
+                + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";  
+        return  str.matches(regex);	
 	}
 	
+	public static void main(String[] args) {
+		boolean httpUrl = isHttpUrl("https://127.0.0.1/a.html");
+		System.out.println(httpUrl);
+	}
 }

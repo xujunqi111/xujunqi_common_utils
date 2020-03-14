@@ -9,23 +9,24 @@ import java.io.InputStream;
 
 public class StreamUtil {
 	/**
-	 * @Title: close   
-	 * @Description: 批量关闭流   
+	 * 关闭流的方法
+	 * @Title: closeAll   
+	 * @Description: 数组参数，可以批量删除多个打开的流   
 	 * @param: @param autoCloseables      
 	 * @return: void      
 	 * @throws
 	 */
-	public static void close(AutoCloseable... autoCloseables ) {
-		for(AutoCloseable autoCloseable:autoCloseables) {
-			try {
-				autoCloseable.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+	public static void closeAll(AutoCloseable... autoCloseables ) {
+		if(autoCloseables!=null) {
+			for(AutoCloseable autoCloseable:autoCloseables) {
+				try {
+					autoCloseable.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
-	
-
 	
 	/**
 	 * @Title: readTextFile   
@@ -49,7 +50,7 @@ public class StreamUtil {
 			e.printStackTrace();
 			return null;
 		}finally {
-			close(inputStream);
+			closeAll(inputStream);
 		}
 	}
 	/**
@@ -63,15 +64,7 @@ public class StreamUtil {
 	public static String readTextFile(String fileFullName) {
 		return readTextFile(new File(fileFullName));
 	}
-	/**
-	 * @Title: writeTextFile   
-	 * @Description: 把内容写到指定文件   
-	 * @param: @param content
-	 * @param: @param file
-	 * @param: @param append      
-	 * @return: void      
-	 * @throws
-	 */
+	
 	public static void writeTextFile(String content,File file,boolean append) {
 		BufferedWriter writer = null;
 		try {
@@ -88,11 +81,16 @@ public class StreamUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally {
-			close(writer);
+			closeAll(writer);
 		}
 	}
 	
 	public static void writeTextFile(String content,String fileFullName,boolean append) {
 		writeTextFile(content,new File(fileFullName), append);
+	}
+
+	public static void main(String[] args) {
+		String readTextFile = readTextFile("C:\\Users\\Administrator\\Desktop\\pom.xml");
+		writeTextFile(readTextFile, "C:\\Users\\Administrator\\Desktop\\aa\\aa.xml",false);
 	}
 }
